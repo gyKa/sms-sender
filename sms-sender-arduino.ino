@@ -1,4 +1,5 @@
 // Works on Arduino IDE 1.0.6 using this library: http://downloads.arduino.cc/GSM-Arduino-1.0.7-afc368b.zip
+// Serial Monitor must be configured to understand that a new line is a line ending symbol.
 
 #include <GSM.h>
 
@@ -14,7 +15,7 @@ void setup() {
 }
 
 void loop() {
-
+    readSerial();
 }
 
 void connectGsm() {
@@ -39,4 +40,18 @@ void sendSms(char *number, char *text) {
     sms.print(text);
     sms.endSMS();
     Serial.println("SMS is sent!");
+}
+
+String readSerial() {
+    String content;
+
+    if (Serial.available()) {
+        content = Serial.readStringUntil('\n');
+    }
+
+    if (content != "") {
+        Serial.println("Got input: " + content);
+    }
+
+    return content;
 }
