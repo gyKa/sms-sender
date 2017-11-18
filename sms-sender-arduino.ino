@@ -4,6 +4,9 @@
 #include <GSM.h>
 
 #define PIN_NUMBER "4463"
+#define SMS_SEPARATOR "|"
+#define SMS_NUMBER_LIMIT 20
+#define SMS_TEXT_LIMIT 160
 
 GSM gsmAccess;
 GSM_SMS sms;
@@ -15,7 +18,7 @@ void setup() {
 }
 
 void loop() {
-    readSerial();
+    smsSending();
 }
 
 void connectGsm() {
@@ -36,9 +39,17 @@ void connectGsm() {
 
 void sendSms(char *number, char *text) {
     Serial.println("Sending SMS...");
+
+    Serial.print("Number: ");
+    Serial.println(number);
+
+    Serial.print("Text: ");
+    Serial.println(text);
+
     sms.beginSMS(number);
     sms.print(text);
     sms.endSMS();
+
     Serial.println("SMS is sent!");
 }
 
@@ -46,12 +57,39 @@ String readSerial() {
     String content;
 
     if (Serial.available()) {
-        content = Serial.readStringUntil('\n');
+        content = Serial.readStringUntil('\n'); // will wait until it receives the character or timeout
     }
 
     if (content != "") {
-        Serial.println("Got input: " + content);
+        Serial.println("Serial: " + content);
     }
 
     return content;
+}
+
+void smsSending() {
+    String input;
+
+    input = readSerial();
+
+    if (input == "") {
+        return;
+    }
+
+    int separatorIndex =  input.indexOf(SMS_SEPARATOR);
+
+    if (separatorIndex <= 0) {
+        return;
+    }
+
+    String number = input.substring(0, separatorIndex);
+    String text = input.substring(separatorIndex + 1);
+
+    char numberArray[SMS_NUMBER_LIMIT];
+    char textArray[SMS_TEXT_LIMIT];
+
+    number.toCharArray(numberArray, SMS_NUMBER_LIMIT);
+    text.toCharArray(textArray, SMS_TEXT_LIMIT);
+
+    sendSms(numberArray, textArray);
 }
