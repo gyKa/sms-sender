@@ -13,8 +13,8 @@ void setup() {
 
     boolean connected = false;
     
-    while(!connected){
-        if(gsmAccess.begin(PIN_NUMBER) == GSM_READY) {
+    while (!connected) {
+        if (gsmAccess.begin(PIN_NUMBER) == GSM_READY) {
             Serial.println("Connected to GSM network!");
             connected = true;
         } else {
@@ -26,4 +26,12 @@ void setup() {
 
 void loop() {
 
+}
+
+void sendSms(char *number, char *text) {
+    Serial.println("Sending SMS...");
+    sms.beginSMS(number);
+    sms.print(text);
+    sms.endSMS();
+    Serial.println("SMS is sent!");
 }
