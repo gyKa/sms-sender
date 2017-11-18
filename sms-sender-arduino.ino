@@ -4,16 +4,19 @@
 #include <GSM.h>
 
 #define PIN_NUMBER "4463"
+#define LED_GSM_STATUS_PIN A0
+
 #define SMS_SEPARATOR "|"
 #define SMS_NUMBER_LIMIT 20
 #define SMS_TEXT_LIMIT 160
+
 
 GSM gsmAccess;
 GSM_SMS sms;
 
 void setup() {
     Serial.begin(9600);
-    
+    pinMode(LED_GSM_STATUS_PIN, OUTPUT);
     connectGsm();
 }
 
@@ -35,6 +38,8 @@ void connectGsm() {
             delay(1000);
         }
     }
+
+    digitalWrite(LED_GSM_STATUS_PIN, HIGH);
 }
 
 void sendSms(char *number, char *text) {
