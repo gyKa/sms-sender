@@ -2,8 +2,26 @@
 
 #include <GSM.h>
 
-void setup() {
+#define PIN_NUMBER "4463"
 
+GSM gsmAccess;
+GSM_SMS sms;
+
+void setup() {
+    Serial.begin(9600);
+    Serial.println("SMS Messages Sender");
+
+    boolean connected = false;
+    
+    while(!connected){
+        if(gsmAccess.begin(PIN_NUMBER) == GSM_READY) {
+            Serial.println("Connected to GSM network!");
+            connected = true;
+        } else {
+            Serial.println("Connecting to GSM network...");
+            delay(1000);
+        }
+    }
 }
 
 void loop() {
