@@ -9,7 +9,16 @@ GSM_SMS sms;
 
 void setup() {
     Serial.begin(9600);
-    Serial.println("SMS Messages Sender");
+    
+    connectGsm();
+}
+
+void loop() {
+
+}
+
+void connectGsm() {
+    Serial.println("Connecting to GSM network...");
 
     boolean connected = false;
     
@@ -18,14 +27,10 @@ void setup() {
             Serial.println("Connected to GSM network!");
             connected = true;
         } else {
-            Serial.println("Connecting to GSM network...");
+            Serial.println("Connection to GSM network failed, trying again...");
             delay(1000);
         }
     }
-}
-
-void loop() {
-
 }
 
 void sendSms(char *number, char *text) {
