@@ -4,7 +4,9 @@
 #include <GSM.h>
 
 #define PIN_NUMBER "4463"
+
 #define LED_GSM_STATUS_PIN A0
+#define LED_SMS_SENDING_PIN A1
 
 #define SMS_SEPARATOR "|"
 #define SMS_NUMBER_LIMIT 20
@@ -16,7 +18,10 @@ GSM_SMS sms;
 
 void setup() {
     Serial.begin(9600);
+
     pinMode(LED_GSM_STATUS_PIN, OUTPUT);
+    pinMode(LED_SMS_SENDING_PIN, OUTPUT);
+
     connectGsm();
 }
 
@@ -44,6 +49,7 @@ void connectGsm() {
 
 void sendSms(char *number, char *text) {
     Serial.println("Sending SMS...");
+    digitalWrite(LED_SMS_SENDING_PIN, HIGH);
 
     Serial.print("Number: ");
     Serial.println(number);
@@ -56,6 +62,7 @@ void sendSms(char *number, char *text) {
     sms.endSMS();
 
     Serial.println("SMS is sent!");
+    digitalWrite(LED_SMS_SENDING_PIN, LOW);
 }
 
 String readSerial() {
